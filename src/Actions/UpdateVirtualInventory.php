@@ -3,6 +3,8 @@
 namespace Armezit\GetCandy\VirtualInventory\Actions;
 
 use Armezit\GetCandy\VirtualInventory\Models\VirtualInventoryItem;
+use GetCandy\Base\Purchasable;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class UpdateVirtualInventory
@@ -51,9 +53,22 @@ class UpdateVirtualInventory
             ->select('id')
             ->get();
 
-        DB::transaction(function () use ($upsert, $deletedIds) {
+        DB::transaction(function () use ($purchasableId, $purchasableType, $upsert, $deletedIds) {
             VirtualInventoryItem::whereIn('id', $deletedIds)->forceDelete();
             VirtualInventoryItem::upsert($upsert, ['id']);
+
+            if (config('virtual-inventory.catalogue.update_purchasable_stock', false)) {
+                $stock = VirtualInventoryItem::withoutTrashed()
+                    ->where([
+                        'purchasable_type' => $purchasableType,
+                        'purchasable_id' => $purchasableId,
+                    ])
+                    ->count();
+
+                $purchasable = App::make($purchasableType)->find($purchasableId);
+                $purchasable->stock = $stock;
+                $purchasable->save();
+            }
         });
     }
 
