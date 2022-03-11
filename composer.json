@@ -1,0 +1,25 @@
+{
+    "name": "armezit/getcandy-virtual-inventory",
+    "description": "GetCandy v2 E-Commerce Virtual Inventory Addon",
+    "keywords": ["getcandy", "laravel", "ecommerce", "e-commerce", "headless", "api", "rest-api"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Armin Rezayati",
+            "email": "armin.rezayati@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Armezit\\GetCandy\\VirtualInventory\\": "src/"
+        }
+    },
+    "extra": {
+        "getcandy": {
+            "name": "Virtual Inventory",
+            "slug": "virtual-inventory"
+        }
+    }
+}

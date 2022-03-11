@@ -1,0 +1,9 @@
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+/.idea
+/.vscode
+/_ide_helper.php
+/_ide_helper_models.php
+/.phpstorm.meta.php
