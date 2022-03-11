@@ -95,10 +95,12 @@ class VirtualInventoryIndex extends Component
      */
     public function getProductsProperty(): array
     {
-        // get all products which their variants has at least one option-value
+        // get all products which have virtual inventory
         return Product::withoutTrashed()
-            ->has('variants.values')
             ->get()
+            ->filter(function (Product $product) {
+                return $product->translateAttribute('has_virtual_inventory') === true;
+            })
             ->map(function ($product) {
                 return [
                     'id' => $product->id,
@@ -129,7 +131,7 @@ class VirtualInventoryIndex extends Component
             ->map(function ($productVariant) {
                 return [
                     'id' => $productVariant->id,
-                    'name' => $productVariant->getOption() ?: 'Default',
+                    'name' => $productVariant->getOption() ?: '',
                 ];
             })
             ->pluck('name', 'id')
@@ -176,16 +178,8 @@ class VirtualInventoryIndex extends Component
          *      ]
          */
 
-        // get product-type attributes
-        $attributes = $this->product->productType
-            ->productAttributes
-            ->sortBy('position')
-            ->values()
-            ->filter(function ($attribute) {
-                return
-                    $attribute->attribute_type === Product::class &&
-                    $attribute->type === Toggle::class;
-            });
+        // get virtual inventory attributes
+        $attributes = $this->product->translateAttribute('virtual_inventory_attributes');
 
         // reset data-specific tableConfig properties
         $this->tableConfig['colHeaders'] = ['ID'];
@@ -193,9 +187,9 @@ class VirtualInventoryIndex extends Component
         $this->tableConfig['columns'] = [['data' => 'id', 'readOnly' => true]];
 
         foreach ($attributes as $attribute) {
-            $this->tableConfig['colHeaders'][] = $attribute->translate('name');
-            $this->tableConfig['dataSchema'][(string)$attribute->id] = null;
-            $this->tableConfig['columns'][] = ['data' => (string)$attribute->id, 'type' => 'text',];
+            $this->tableConfig['colHeaders'][] = $attribute;
+            $this->tableConfig['dataSchema'][(string)$attribute] = null;
+            $this->tableConfig['columns'][] = ['data' => (string)$attribute, 'type' => 'text',];
         }
 
     }
