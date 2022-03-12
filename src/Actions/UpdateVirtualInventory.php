@@ -3,10 +3,12 @@
 namespace Armezit\GetCandy\VirtualInventory\Actions;
 
 use Armezit\GetCandy\VirtualInventory\Models\VirtualInventoryItem;
-use GetCandy\Base\Purchasable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Update available inventory items
+ */
 class UpdateVirtualInventory
 {
 
