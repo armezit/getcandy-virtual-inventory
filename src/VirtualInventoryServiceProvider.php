@@ -4,7 +4,11 @@ namespace Armezit\GetCandy\VirtualInventory;
 
 use Armezit\GetCandy\VirtualInventory\Http\Livewire\Components\Handsontable;
 use Armezit\GetCandy\VirtualInventory\Http\Livewire\Components\VirtualInventoryIndex;
+use Armezit\GetCandy\VirtualInventory\Models\VirtualInventoryItem;
 use GetCandy\Hub\Facades\Menu;
+use GetCandy\Models\Customer;
+use GetCandy\Models\OrderLine;
+use GetCandy\Models\ProductVariant;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 
@@ -39,6 +43,8 @@ class VirtualInventoryServiceProvider extends ServiceProvider
         $this->registerLivewireComponents();
 
         $this->registerMenuBuilder();
+
+        $this->registerDynamicRelationships();
     }
 
     /**
@@ -78,6 +84,25 @@ class VirtualInventoryServiceProvider extends ServiceProvider
             )->handle('hub.virtual-inventory')
                 ->route('hub.virtual-inventory.index')
                 ->icon('view-boards');
+        });
+    }
+
+    /**
+     * Extend getcandy models using dynamic relationships
+     * @return void
+     */
+    private function registerDynamicRelationships()
+    {
+        OrderLine::resolveRelationUsing('virtualItem', function ($orderModel) {
+            return $orderModel->hasOne(VirtualInventoryItem::class, 'order_line_id')->onlyTrashed();
+        });
+
+        Customer::resolveRelationUsing('virtualItems', function ($customerModel) {
+            return $customerModel->hasMany(VirtualInventoryItem::class, 'customer_id')->onlyTrashed();
+        });
+
+        ProductVariant::resolveRelationUsing('virtualItems', function ($productVariantModel) {
+            return $productVariantModel->morphMany(VirtualInventoryItem::class, 'purchasable');
         });
     }
 
