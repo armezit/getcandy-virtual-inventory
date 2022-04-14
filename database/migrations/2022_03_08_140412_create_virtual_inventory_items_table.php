@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('virtual_inventory_items', function (Blueprint $table) {
             $table->id();
             $table->morphs('purchasable');
+            $table->foreignId('order_line_id')->nullable()->index();
             $table->foreignId('customer_id')->nullable()->index();
             $table->json('attributes');
             $table->timestamps();
