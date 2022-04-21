@@ -1,7 +1,7 @@
 <div class="flex-col px-12 space-y-4">
 
     <div class="grid grid-cols-3 gap-4">
-        <x-hub::input.group label="Product" for="productId">
+        <x-hub::input.group label="{{ __('virtual-inventory::catalogue.product') }}" for="productId">
             <div>
                 <x-hub::input.select wire:model="productId"
                                      wire:change="onProductChange">
@@ -17,7 +17,7 @@
     </div>
 
     <div class="grid grid-cols-3 gap-4">
-        <x-hub::input.group label="Product Variant" for="productVariantId">
+        <x-hub::input.group label="{{ __('virtual-inventory::catalogue.product_variant') }}" for="productVariantId">
             <div>
                 <x-hub::input.select wire:model="productVariantId"
                                      wire:change="refresh">
