@@ -39,13 +39,7 @@
      }"
      @handsontable:refresh.window="refresh($event.detail.config, $event.detail.data)"
 >
-</div>
-
-@push('scripts')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css"/>
     <script type="text/javascript"
             src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
-@endpush
-
-@push('styles')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css"/>
-@endpush
+</div>

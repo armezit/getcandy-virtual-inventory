@@ -15,9 +15,8 @@ class VirtualInventoryIndex extends Component
     public function render()
     {
         return view('virtual-inventory::livewire.pages.virtual-inventory.index')
-            ->layout('virtual-inventory::layouts.app', [
-                'title' => 'Virtual Inventory',
+            ->layout('adminhub::layouts.app', [
+                'title' => __('virtual-inventory::catalogue.virtual-inventory.index.title'),
             ]);
-
     }
 }
